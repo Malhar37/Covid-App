@@ -75,13 +75,15 @@ public class DistrictsFragment extends Fragment {
                             break;
                         }
                     }
-
+                    binding.progressBarLayout.setVisibility(View.GONE);
+                    binding.nestedView.setVisibility(View.VISIBLE);
                 }
             }
 
             @Override
             public void onFailure(Call<List<Example>> call, Throwable t) {
-
+                binding.progressbar.setVisibility(View.GONE);
+                binding.statusTV.setText("Error occured, Please retry");
             }
         });
     }

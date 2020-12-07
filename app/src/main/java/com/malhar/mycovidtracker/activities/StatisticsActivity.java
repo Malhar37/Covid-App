@@ -1,11 +1,11 @@
-package com.malhar.mycovidtracker;
+package com.malhar.mycovidtracker.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 
-import com.malhar.mycovidtracker.activities.BaseActivity;
 import com.malhar.mycovidtracker.adapter.StateAdapter;
 import com.malhar.mycovidtracker.databinding.ActivityStatisticsBinding;
 import com.malhar.mycovidtracker.dataclasses.StateResponse;
@@ -30,8 +30,6 @@ public class StatisticsActivity extends AppCompatActivity {
         binding = ActivityStatisticsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        binding.activeCard.setOnClickListener(v -> startActivity(new Intent(this, BaseActivity.class)));
-
         setUpUi();
     }
 
@@ -51,6 +49,7 @@ public class StatisticsActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<StateResponse> call, Response<StateResponse> response) {
                 if (response.isSuccessful()) {
+
                     StateResponse res = response.body();
 
                     //First entry in list is total counts; set it to textviews in cardviews and delete
@@ -65,12 +64,17 @@ public class StatisticsActivity extends AppCompatActivity {
 
                     adapter = new StateAdapter(StatisticsActivity.this,res.getStatewise());
                     binding.rv.setAdapter(adapter);
+
+                    binding.progressBarLayout.setVisibility(View.GONE);
+                    binding.nestedView.setVisibility(View.VISIBLE);
+
                 }
             }
 
             @Override
             public void onFailure(Call<StateResponse> call, Throwable t) {
-
+                binding.progressbar.setVisibility(View.GONE);
+                binding.statusTV.setText("Error occured, Please retry");
             }
         });
     }

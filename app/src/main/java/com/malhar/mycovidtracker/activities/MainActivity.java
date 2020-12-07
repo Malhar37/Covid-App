@@ -1,4 +1,4 @@
-package com.malhar.mycovidtracker;
+package com.malhar.mycovidtracker.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -13,7 +13,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 
 import com.google.android.material.navigation.NavigationView;
-import com.malhar.mycovidtracker.activities.BaseActivity;
+import com.malhar.mycovidtracker.R;
 import com.malhar.mycovidtracker.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity implements
