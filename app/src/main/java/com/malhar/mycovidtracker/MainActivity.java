@@ -2,15 +2,13 @@ package com.malhar.mycovidtracker;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import android.content.Intent;
 import android.os.Bundle;
 import com.malhar.mycovidtracker.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
-//    private Button button;
-//    Toolbar toolbar;
-//    DrawerLayout drawerLayout;
-//    NavigationView navigationView;
+
     ActivityMainBinding binding;
 
     @Override
@@ -30,14 +28,18 @@ public class MainActivity extends AppCompatActivity {
 
         binding.drawer.addDrawerListener(toggle);
 
-        //button = findViewById(R.id.button);
-        // toolbar = findViewById(R.id.toolbar);
-        //drawerLayout = findViewById(R.id.drawer);
-        //navigationView = findViewById(R.id.nav_view);
-
         binding.button.setOnClickListener(v ->
                 startActivity(new Intent(MainActivity.this, StatisticsActivity.class))
         );
 
     }
+    @Override
+    public void onBackPressed() {
+        if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
+            binding.drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
 }
