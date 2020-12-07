@@ -48,6 +48,7 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.ViewHolder> 
             intent.putExtra("active", list.get(position).getActive());
             intent.putExtra("dead", list.get(position).getDeaths());
             intent.putExtra("cured", list.get(position).getRecovered());
+            intent.putExtra("FragmentType", "District");
             context.startActivity(intent);
         });
 
