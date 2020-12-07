@@ -36,6 +36,8 @@ public class StatisticsActivity extends AppCompatActivity {
     }
 
     private void setUpUi(){
+
+        //Retrofit
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.covid19india.org/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -50,7 +52,17 @@ public class StatisticsActivity extends AppCompatActivity {
             public void onResponse(Call<StateResponse> call, Response<StateResponse> response) {
                 if (response.isSuccessful()) {
                     StateResponse res = response.body();
-                    System.out.println(res.getStatewise().get(1).getState());
+
+                    //First entry in list is total counts; set it to textviews in cardviews and delete
+                    // 1st entry so that it will not be shown in recycler view
+
+                    binding.confirmedTv.setText(res.getStatewise().get(0).getConfirmed());
+                    binding.activeTv.setText(res.getStatewise().get(0).getActive());
+                    binding.deathTv.setText(res.getStatewise().get(0).getDeaths());
+                    binding.recoveredTv.setText(res.getStatewise().get(0).getRecovered());
+
+                    res.getStatewise().remove(0);
+
                     adapter = new StateAdapter(StatisticsActivity.this,res.getStatewise());
                     binding.rv.setAdapter(adapter);
                 }

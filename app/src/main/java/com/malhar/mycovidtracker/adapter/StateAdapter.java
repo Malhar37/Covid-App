@@ -41,10 +41,16 @@ public class StateAdapter extends RecyclerView.Adapter<StateAdapter.ViewHolder> 
         holder.tv4.setText(list.get(position).getDeaths());
         holder.tv5.setText(list.get(position).getRecovered());
 
-        holder.itemView.setOnClickListener(v ->
-                context.startActivity(new Intent(context, BaseActivity.class)
-                        .putExtra("state", list.get(position).getState()))
-        );
+        holder.itemView.setOnClickListener((View.OnClickListener) v -> {
+            Intent intent = new Intent(context, BaseActivity.class);
+            intent.putExtra("state", list.get(position).getState());
+            intent.putExtra("confirm", list.get(position).getConfirmed());
+            intent.putExtra("active", list.get(position).getActive());
+            intent.putExtra("dead", list.get(position).getDeaths());
+            intent.putExtra("cured", list.get(position).getRecovered());
+            context.startActivity(intent);
+        });
+
     }
 
     @Override
