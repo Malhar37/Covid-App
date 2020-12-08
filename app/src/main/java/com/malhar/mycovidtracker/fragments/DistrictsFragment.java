@@ -49,10 +49,16 @@ public class DistrictsFragment extends Fragment {
         binding.recoveredTv.setText(requireActivity().getIntent().getStringExtra("cured"));
 
         setUpUi();
+
+        binding.swipeLayout.setOnRefreshListener(this::setUpUi);
+
         return binding.getRoot();
     }
 
     private void setUpUi() {
+
+        binding.nestedView.setVisibility(View.INVISIBLE);
+
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.covid19india.org/")
                 .addConverterFactory(GsonConverterFactory.create())
@@ -77,6 +83,9 @@ public class DistrictsFragment extends Fragment {
                     }
                     binding.progressBarLayout.setVisibility(View.GONE);
                     binding.nestedView.setVisibility(View.VISIBLE);
+
+                    binding.swipeLayout.setRefreshing(false);
+
                 }
             }
 

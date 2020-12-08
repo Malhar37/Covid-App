@@ -1,6 +1,7 @@
 package com.malhar.mycovidtracker.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,10 +32,13 @@ public class StatisticsActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         setUpUi();
+
+        binding.swipeLayout.setOnRefreshListener(this::setUpUi);
     }
 
     private void setUpUi(){
 
+        binding.nestedView.setVisibility(View.INVISIBLE);
         //Retrofit
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.covid19india.org/")
@@ -67,6 +71,8 @@ public class StatisticsActivity extends AppCompatActivity {
 
                     binding.progressBarLayout.setVisibility(View.GONE);
                     binding.nestedView.setVisibility(View.VISIBLE);
+
+                    binding.swipeLayout.setRefreshing(false);
 
                 }
             }
