@@ -244,8 +244,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:text="   City"
+                            android:text="City"
+                            android:gravity="center"
+                            android:layout_marginStart="34dp"
                             android:textColor="#001d74"
                             android:textSize="20sp"
                             android:textStyle="bold">
@@ -255,8 +256,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="0.8"
-                            android:gravity="center"
+                            android:layout_marginStart="35dp"
                             android:text="Confirm"
                             android:textColor="#001d74"
                             android:textSize="20sp"
@@ -267,9 +267,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
                             android:text="Active"
+                            android:layout_marginStart="17dp"
                             android:textColor="#001d74"
                             android:textSize="20sp"
                             android:textStyle="bold">
@@ -279,8 +278,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
+                            android:layout_marginStart="12dp"
                             android:text="Death"
                             android:textColor="#001d74"
                             android:textSize="20sp"
@@ -291,9 +289,8 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:text="Recover"
+                            android:layout_marginStart="13dp"
+                            android:text="Cured"
                             android:textColor="#001d74"
                             android:textSize="20sp"
                             android:textStyle="bold">

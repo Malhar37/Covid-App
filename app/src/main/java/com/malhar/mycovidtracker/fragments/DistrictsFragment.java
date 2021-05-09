@@ -8,14 +8,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.malhar.mycovidtracker.R;
 import com.malhar.mycovidtracker.adapter.DistrictsAdapter;
 import com.malhar.mycovidtracker.databinding.FragmentDistrictsBinding;
-import com.malhar.mycovidtracker.dataclasses.Example;
+import com.malhar.mycovidtracker.dataclasses.DistrictResponse;
 import com.malhar.mycovidtracker.interfaces.ApiService;
+import com.readystatesoftware.chuck.ChuckInterceptor;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,12 +37,14 @@ public class DistrictsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
         binding = FragmentDistrictsBinding.inflate(inflater, container, false);
 
-        //set data to textviews
+        /*
+           get strings passed by intent from StateAdapter and set it to corresponding TextViews
+         */
 
         state = requireActivity().getIntent().getStringExtra("state");
         binding.stateTv.setText(state);
@@ -59,21 +64,38 @@ public class DistrictsFragment extends Fragment {
 
         binding.nestedView.setVisibility(View.INVISIBLE);
 
+        /*
+           1. Create OkHttp client
+           2. Add Chuck Interceptor to it
+           3. Chuck shows the data we have received in notification bar
+         */
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new ChuckInterceptor(requireContext()))
+                .build();
+        /*
+           Retrofit instance
+         */
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.covid19india.org/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build();
 
         ApiService apiService = retrofit.create(ApiService.class);
 
-        Call<List<Example>> call = apiService.getDistricts();
+        Call<List<DistrictResponse>> call = apiService.getDistricts();
 
-        call.enqueue(new Callback<List<Example>>() {
+        call.enqueue(new Callback<List<DistrictResponse>>() {
             @Override
-            public void onResponse(Call<List<Example>> call, Response<List<Example>> response) {
+            public void onResponse(@NotNull Call<List<DistrictResponse>> call, @NotNull  Response<List<DistrictResponse>> response) {
                 if (response.isSuccessful()) {
-                    List<Example> list = response.body();
-
+                    List<DistrictResponse> list = response.body();
+                    /*
+                       1. Above list contains data of all states
+                       2. To get the data of required state iterate through above list till object
+                       corresponding to req. state is found
+                       3. Then set adapter with list of district data of req. state
+                     */
                     for (int i = 0; i < list.size(); i++) {
                         if (list.get(i).getState().equals(state)) {
                             adapter = new DistrictsAdapter(getContext(), list.get(i).getDistrictData());
@@ -90,7 +112,7 @@ public class DistrictsFragment extends Fragment {
             }
 
             @Override
-            public void onFailure(Call<List<Example>> call, Throwable t) {
+            public void onFailure(@NotNull Call<List<DistrictResponse>> call, @NotNull Throwable t) {
                 binding.progressbar.setVisibility(View.GONE);
                 binding.statusTV.setText("Error occured, Please retry");
             }

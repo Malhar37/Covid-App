@@ -18,9 +18,13 @@
         tools:layout_editor_absoluteX="127dp"
         tools:layout_editor_absoluteY="235dp" />
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@drawable/ic_homebg"
         tools:context=".activities.MainActivity">
 
@@ -192,6 +196,8 @@
             app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
 </androidx.drawerlayout.widget.DrawerLayout>
 

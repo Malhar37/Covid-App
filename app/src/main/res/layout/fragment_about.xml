@@ -138,6 +138,7 @@
         android:textColor="#001d74"
         tools:text="vgujbbjbjkbvhjv"
         android:textSize="20sp"
+        android:autoLink="all"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView9" />

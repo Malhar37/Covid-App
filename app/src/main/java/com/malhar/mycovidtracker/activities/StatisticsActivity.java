@@ -1,17 +1,17 @@
 package com.malhar.mycovidtracker.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-
 import com.malhar.mycovidtracker.adapter.StateAdapter;
 import com.malhar.mycovidtracker.databinding.ActivityStatisticsBinding;
 import com.malhar.mycovidtracker.dataclasses.StateResponse;
 import com.malhar.mycovidtracker.interfaces.ApiService;
+import com.readystatesoftware.chuck.ChuckInterceptor;
 
+import org.jetbrains.annotations.NotNull;
+
+import okhttp3.OkHttpClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -39,10 +39,22 @@ public class StatisticsActivity extends AppCompatActivity {
     private void setUpUi(){
 
         binding.nestedView.setVisibility(View.INVISIBLE);
-        //Retrofit
+        /*
+           1. Create OkHttp client
+           2. Add Chuck Interceptor to it
+           3. Chuck shows the data we have received in notification bar
+         */
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(new ChuckInterceptor(this))
+                .build();
+
+        /*
+           Create Retrofit instance
+         */
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://api.covid19india.org/")
                 .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
                 .build();
 
         ApiService apiService = retrofit.create(ApiService.class);
@@ -51,7 +63,7 @@ public class StatisticsActivity extends AppCompatActivity {
 
         call.enqueue(new Callback<StateResponse>() {
             @Override
-            public void onResponse(Call<StateResponse> call, Response<StateResponse> response) {
+            public void onResponse(@NotNull Call<StateResponse> call, @NotNull Response<StateResponse> response) {
                 if (response.isSuccessful()) {
 
                     StateResponse res = response.body();
@@ -69,6 +81,10 @@ public class StatisticsActivity extends AppCompatActivity {
                     adapter = new StateAdapter(StatisticsActivity.this,res.getStatewise());
                     binding.rv.setAdapter(adapter);
 
+                    /*
+                       1. Hide loading screen if the data is fetched
+                       2. Show ui of screen containing the information
+                     */
                     binding.progressBarLayout.setVisibility(View.GONE);
                     binding.nestedView.setVisibility(View.VISIBLE);
 
@@ -78,7 +94,10 @@ public class StatisticsActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<StateResponse> call, Throwable t) {
+            public void onFailure(@NotNull Call<StateResponse> call, @NotNull Throwable t) {
+                /*
+                   If error has occurred then hide loading progress bar and show below error message
+                 */
                 binding.progressbar.setVisibility(View.GONE);
                 binding.statusTV.setText("Error occured, Please retry");
             }

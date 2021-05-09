@@ -44,8 +44,13 @@ public class MainActivity extends AppCompatActivity implements
         );
 
     }
+
     @Override
     public void onBackPressed() {
+        /*
+          If drawer is open then close it on back pressed
+          Else close activity
+         */
         if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
             binding.drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -61,25 +66,36 @@ public class MainActivity extends AppCompatActivity implements
                 binding.drawer.closeDrawer(GravityCompat.START);
                 break;
             }
-            case R.id.website:{
+            case R.id.website: {
+                /*
+                  Open mentioned website
+                 */
                 Intent myWebLink = new Intent(android.content.Intent.ACTION_VIEW);
                 myWebLink.setData(Uri.parse("https://covid19indiadata.herokuapp.com/"));
                 startActivity(myWebLink);
                 break;
             }
             case R.id.nav_about: {
-                Intent intent=new Intent(getApplicationContext(), BaseActivity.class);
-                intent.putExtra("FragmentType","About");
+                /*
+                  Open about fragment
+                 */
+                Intent intent = new Intent(getApplicationContext(), BaseActivity.class);
+                intent.putExtra("FragmentType", "About");
                 startActivity(intent);
                 break;
             }
-            case R.id.nav_feedback:{
-                try{
-                    Intent intent = new Intent (Intent.ACTION_VIEW , Uri.parse("mailto:" + "atharvsk11@gmail.com"));
+            case R.id.nav_feedback: {
+                try {
+                    /*
+                      Send feedback email to mentioned email IDs
+                     */
+                    Intent intent = new Intent(Intent.ACTION_SENDTO);
+                    intent.setData(Uri.parse("mailto:"));
+                    intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"atharvsk11@gmail.com",
+                            "loharmalhar@gmail.com", "manavahuja3@gmail.com"});
                     intent.putExtra(Intent.EXTRA_SUBJECT, "Feedback");
-                    //intent.putExtra(Intent.EXTRA_TEXT, "your_text");
                     startActivity(intent);
-                }catch(ActivityNotFoundException e){
+                } catch (ActivityNotFoundException e) {
                     e.printStackTrace();
                 }
             }
